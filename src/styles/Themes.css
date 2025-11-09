@@ -1,0 +1,522 @@
+/* Theme.css - Enhanced Core Variables, Typography & Global Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* ========== WHITE THEME (DEFAULT) ========== */
+:root {
+  --primary-color: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1e40af;
+  --accent-color: #dc2626;
+  --success-color: #059669;
+  --warning-color: #f59e0b;
+  --info-color: #06b6d4;
+  
+  --background-primary: #ffffff;
+  --background-secondary: #f8fafc;
+  --background-tertiary: #f1f5f9;
+  --background-elevated: #ffffff;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-on-primary: #ffffff;
+  --text-inverse: #ffffff;
+  
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+  --divider-color: #cbd5e1;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.2);
+  
+  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+  --gradient-overlay: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+  --gradient-subtle: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  
+  --font-primary: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 48px;
+  
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 9999px;
+  
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --header-height: 70px;
+  --nav-height: 48px;
+  
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal: 1050;
+  --z-tooltip: 1060;
+}
+
+/* ========== DARK THEME (Cyberpunk Inspired) ========== */
+[data-theme="dark"] {
+  --primary-color: #00ffc6;
+  --primary-light: #5fffdb;
+  --primary-dark: #00d9a8;
+  --accent-color: #ff4d6d;
+  --success-color: #00ff88;
+  --warning-color: #ffb700;
+  --info-color: #00d4ff;
+  
+  --background-primary: #000000;
+  --background-secondary: #0a0a0a;
+  --background-tertiary: #121212;
+  --background-elevated: #1a1a1a;
+  
+  --text-primary: #ffffff;
+  --text-secondary: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --text-on-primary: #000000;
+  --text-inverse: #000000;
+  
+  --border-color: #1a1a1a;
+  --border-light: #0f0f0f;
+  --divider-color: #00ffc6;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 255, 198, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 255, 198, 0.15);
+  --shadow-lg: 0 10px 15px rgba(0, 255, 198, 0.2);
+  --shadow-xl: 0 20px 25px rgba(0, 255, 198, 0.25);
+  --shadow-2xl: 0 30px 60px rgba(0, 255, 198, 0.3);
+  
+  --gradient-primary: linear-gradient(135deg, #00ffc6 0%, #00d9a8 50%, #00ff88 100%);
+  --gradient-overlay: linear-gradient(180deg, transparent 0%, #000000 100%);
+  --gradient-subtle: linear-gradient(135deg, #0a0a0a 0%, #121212 100%);
+  
+  /* Glow effects for dark theme */
+  --glow-primary: 0 0 20px rgba(0, 255, 198, 0.4);
+  --glow-accent: 0 0 20px rgba(255, 77, 109, 0.4);
+}
+
+/* ========== MINT THEME (Cool & Fresh) ========== */
+[data-theme="mint"] {
+  --primary-color: #00d4aa;
+  --primary-light: #00e6c3;
+  --primary-dark: #00b894;
+  --accent-color: #0984e3;
+  --success-color: #00b894;
+  --warning-color: #fdcb6e;
+  --info-color: #74b9ff;
+  
+  --background-primary: #f0fffe;
+  --background-secondary: #e6fffe;
+  --background-tertiary: #d1fff9;
+  --background-elevated: #ffffff;
+  
+  --text-primary: #0d3d3d;
+  --text-secondary: #2d5555;
+  --text-muted: #5f8787;
+  --text-on-primary: #ffffff;
+  --text-inverse: #ffffff;
+  
+  --border-color: #b8e6e6;
+  --border-light: #d1fff9;
+  --divider-color: #00d4aa;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 212, 170, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 212, 170, 0.15);
+  --shadow-lg: 0 10px 15px rgba(0, 212, 170, 0.2);
+  --shadow-xl: 0 20px 25px rgba(0, 212, 170, 0.25);
+  --shadow-2xl: 0 30px 60px rgba(0, 212, 170, 0.3);
+  
+  --gradient-primary: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+  --gradient-overlay: linear-gradient(180deg, transparent 0%, rgba(13, 61, 61, 0.8) 100%);
+  --gradient-subtle: linear-gradient(135deg, #f0fffe 0%, #d1fff9 100%);
+}
+
+/* ========== AFRICAN THEME (Earthy & Vibrant) ========== */
+[data-theme="african"] {
+  /* Pan-African Colors */
+  --primary-color: #dc2626; /* Red - Struggle & Sacrifice */
+  --primary-light: #ef4444;
+  --primary-dark: #991b1b;
+  --accent-color: #16a34a; /* Green - Fertility & Growth */
+  --success-color: #84cc16; /* Lime - Prosperity */
+  --warning-color: #eab308; /* Yellow/Gold - Wealth */
+  --info-color: #0891b2; /* Cyan - Water/Life */
+  
+  /* Warm Earthy Backgrounds */
+  --background-primary: #faf8f5;
+  --background-secondary: #f5f1ea;
+  --background-tertiary: #ede5d8;
+  --background-elevated: #ffffff;
+  
+  /* Rich Text Colors */
+  --text-primary: #1c1917; /* Almost black/charcoal */
+  --text-secondary: #44403c; /* Warm dark gray */
+  --text-muted: #78716c; /* Warm medium gray */
+  --text-on-primary: #ffffff;
+  --text-inverse: #faf8f5;
+  
+  /* Natural Borders */
+  --border-color: #d6c9ba;
+  --border-light: #e7ddd0;
+  --divider-color: #dc2626;
+  
+  /* Warm Shadows */
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.1);
+  --shadow-md: 0 4px 6px rgba(28, 25, 23, 0.12);
+  --shadow-lg: 0 10px 15px rgba(28, 25, 23, 0.15);
+  --shadow-xl: 0 20px 25px rgba(28, 25, 23, 0.18);
+  --shadow-2xl: 0 30px 60px rgba(28, 25, 23, 0.22);
+  
+  /* Pan-African Gradient */
+  --gradient-primary: linear-gradient(135deg, #dc2626 0%, #16a34a 33%, #eab308 66%, #000000 100%);
+  --gradient-overlay: linear-gradient(180deg, transparent 0%, rgba(28, 25, 23, 0.85) 100%);
+  --gradient-subtle: linear-gradient(135deg, #faf8f5 0%, #f5f1ea 100%);
+  
+  /* African-inspired pattern overlay (optional usage) */
+  --pattern-overlay: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L30 30L0 30z' fill='%23dc2626' fill-opacity='0.02'/%3E%3Cpath d='M30 30L60 30L60 60z' fill='%2316a34a' fill-opacity='0.02'/%3E%3C/svg%3E");
+  
+  /* Accent colors for categories */
+  --african-red: #dc2626;
+  --african-green: #16a34a;
+  --african-yellow: #eab308;
+  --african-black: #1c1917;
+  --african-brown: #92400e;
+  --african-terracotta: #c2410c;
+  --african-gold: #f59e0b;
+}
+
+/* ========== GLOBAL RESET ========== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  background: var(--background-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+/* African theme body gets subtle pattern */
+[data-theme="african"] body {
+  background-image: var(--pattern-overlay);
+  background-attachment: fixed;
+}
+
+/* ========== TYPOGRAPHY ========== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text-primary);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+h1 { 
+  font-size: clamp(2rem, 5vw, 3rem); 
+  font-weight: 900; 
+}
+
+h2 { 
+  font-size: clamp(1.5rem, 4vw, 1.875rem); 
+  font-weight: 800; 
+}
+
+h3 { 
+  font-size: clamp(1.125rem, 3vw, 1.25rem); 
+  font-weight: 700; 
+}
+
+h4 { 
+  font-size: 1.125rem; 
+  font-weight: 600; 
+}
+
+h5 { 
+  font-size: 1rem; 
+  font-weight: 600; 
+}
+
+h6 { 
+  font-size: 0.875rem; 
+  font-weight: 600; 
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-light);
+}
+
+strong, b {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* ========== UTILITY CLASSES ========== */
+.main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
+@media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block; }
+}
+
+/* Text utilities */
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-glow {
+  text-shadow: var(--glow-primary);
+}
+
+/* ========== LOADING STATES ========== */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+  color: white;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: var(--spacing-lg);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-top: var(--spacing-md);
+}
+
+/* ========== SCROLLBAR STYLING ========== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+  transition: var(--transition-fast);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-light);
+}
+
+/* Dark theme glowing scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  box-shadow: 0 0 10px rgba(0, 255, 198, 0.5);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 15px rgba(0, 255, 198, 0.7);
+}
+
+/* African theme warm scrollbar */
+[data-theme="african"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #dc2626 0%, #16a34a 50%, #eab308 100%);
+}
+
+/* Mint theme fresh scrollbar */
+[data-theme="mint"] ::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  box-shadow: 0 0 5px rgba(0, 212, 170, 0.3);
+}
+
+/* ========== SELECTION COLORS ========== */
+::selection {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+[data-theme="dark"] ::selection {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+  text-shadow: var(--glow-primary);
+}
+
+[data-theme="african"] ::selection {
+  background: var(--african-red);
+  color: white;
+}
+
+[data-theme="mint"] ::selection {
+  background: var(--primary-color);
+  color: white;
+}
+
+/* ========== ACCESSIBILITY ========== */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-decoration: none;
+  border-radius: 0 0 var(--border-radius-md) 0;
+  z-index: var(--z-tooltip);
+  font-weight: 600;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --text-muted: var(--text-secondary);
+  }
+  
+  [data-theme="dark"] {
+    --border-color: #ffffff;
+  }
+}
+
+/* ========== THEME-SPECIFIC ENHANCEMENTS ========== */
+
+/* Dark theme neon effects */
+[data-theme="dark"] .card-large:hover,
+[data-theme="dark"] .card-medium:hover,
+[data-theme="dark"] .card-small:hover {
+  box-shadow: var(--glow-primary);
+}
+
+/* African theme card borders */
+[data-theme="african"] .card-large,
+[data-theme="african"] .card-medium,
+[data-theme="african"] .card-small {
+  border-left: 3px solid transparent;
+  border-image: var(--gradient-primary) 1;
+}
+
+/* Mint theme soft shadows */
+[data-theme="mint"] .card-large:hover,
+[data-theme="mint"] .card-medium:hover,
+[data-theme="mint"] .card-small:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+}
+
+/* ========== PRINT STYLES ========== */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .no-print,
+  .mobile-fab-group,
+  .stories-btn,
+  .header-wrapper,
+  footer {
+    display: none !important;
+  }
+}
+
+/* ========== PERFORMANCE OPTIMIZATIONS ========== */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* GPU acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

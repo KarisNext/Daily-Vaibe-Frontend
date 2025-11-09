@@ -1,0 +1,21 @@
+To Do List
+Client
+1. Add National, Vybe, Social, as the new categories
+2. Check Featured, not working error 404
+3. Reorganize the Home Page Top Headlines, add thumbnails on them, also animate them, such that they keep changing, For Home Page categories, begin with Politics, International news, Buzz, Economy, 
+4. Reorganize trending, exactly below the Slider, bring trending Ribbon, with only views. So retrieve a ribbon with number of views.
+5. Below in the Footer, there are two ads sliders, we will convert them to news slider, they will retrieve Image of specific news categories, only the image, number of views, nothing else.
+6. Customize content revealing Buttons, they should work on Smartphones, Desktops and Computers effectively. The hamburger menu needs to be strong in all devices.
+7. Horizontal Buttons now appearing as Hamburger menu on mobile, the overlay is very boring. Since it is on Middle, why dont they pop out nicely and beautifully.
+7. The header needs proper rewiring. We need to have clear functions, and now inviting the Prices.tsx, which in return usePrices.tsx
+8. Gallery needs to be abit very compact and 3 on mobile, shows views, and they should keep changing based on how views are coming, with those with the highest amount of views in the last 12 hours appearing. So Gallery needs a very strong upgrade. Add a Return button hovering always that will rewire back to the page.tsx
+9. Article.tsx needs to allow administration of more pages. 3 most similar articles should be paired below, in Computers 2, in Smartphones, 1, with fading news and readmore. Then in between them, we will fix trending news and advertisments, so a marquee,
+ADMIN
+1. Match up CreatePosts and RetrievePosts, with these new changes. Retrieve Posts Edit.tsx is still failing, it also need to fetch categories from the DB so that search filter can be more informed add CSS
+2. We need to upgrade the users user roles. Super Admins can only approve complete ban of any user, but admins can add and ban any Editor or Writer. Have Writers page, Writers can only access CreatePosts, RetrievePosts, SharePosts, View Analytics, and now we need to have Personal Profiles, with Earnings, this should be a Full component viewable by writers.
+3. When a Writer Publishes content. It reaches the Editor first, who approves. Super Admins and Editors can publish without Approval. Super Admins and Editors can equally delete any article. 
+4. Editors can approve new Writer Applicants, Super Admins.  Super Admin and Editors can appoint new writers, to editorial role, equally demote them. Super Admin approve payments for writers. Users need strong upgrade, first tile them, and when we edit the editng should issue notifications.
+5. We need a Writer, or Editor Registration form and it will await approval from Super Admin. That Page following all sessions requirements, and meeting the table, compatible with all devices.
+6. We need to have Admin Notifications, when Views of specific articles increase, trending, when writer submit article, when editor publishes any article it sends an admins
+7. Rework on the Chat.tsx component it needs to allow broadcast group sharing, and also individual group. This components needs a serious upgrade. 
+

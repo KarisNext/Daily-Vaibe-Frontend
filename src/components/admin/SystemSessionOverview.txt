@@ -1,0 +1,199 @@
+'use client';
+
+import React, { useState, useEffect, useCallback } from 'react';
+
+interface SessionStats {
+  publicSessions: number;
+  adminSessions: number;
+  userSessions: number;
+  deviceFingerprints: number;
+  activeDevices: number;
+  onlineVisitors: number;
+  totalArticles: number;
+}
+
+interface CleanupResult {
+  success: boolean;
+  removed: number;
+}
+
+const SessionOverview: React.FC = () => {
+  const [stats, setStats] = useState<SessionStats | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [cleanupLoading, setCleanupLoading] = useState(false);
+  const [autoRefresh, setAutoRefresh] = useState(true);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      const response = await fetch('/api/admin/system-services/cleanup/stats');
+      const data = await response.json();
+      
+      if (data.success && data.stats) {
+        setStats(data.stats);
+      }
+    } catch (error) {
+      console.error('Error fetching session stats:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const cleanupDeadSessions = async () => {
+    if (!confirm('Remove all expired sessions? This will clean up inactive data while preserving active sessions.')) {
+      return;
+    }
+
+    setCleanupLoading(true);
+    try {
+      const response = await fetch('/api/admin/system-services/cleanup/manual', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        alert(`✅ Cleanup complete! Removed ${data.results?.publicSessions || 0} expired sessions.`);
+        fetchStats();
+      } else {
+        alert('❌ Cleanup failed: ' + (data.error || 'Unknown error'));
+      }
+    } catch (error) {
+      alert('❌ Cleanup operation failed');
+    } finally {
+      setCleanupLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStats();
+
+    if (autoRefresh) {
+      const interval = setInterval(fetchStats, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [fetchStats, autoRefresh]);
+
+  if (isLoading) {
+    return (
+      <div className="session-overview-loading">
+        <div className="loading-spinner">🔄</div>
+        <p>Loading Session Overview...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="session-overview">
+      <div className="overview-header">
+        <div className="header-info">
+          <h2>📊 Session Overview</h2>
+          <p>Monitor active sessions and device activity</p>
+        </div>
+        <div className="header-controls">
+          <button
+            className={`toggle-btn ${autoRefresh ? 'active' : ''}`}
+            onClick={() => setAutoRefresh(!autoRefresh)}
+          >
+            {autoRefresh ? '🟢 Auto Refresh' : '⚪ Auto Refresh'}
+          </button>
+          <button className="refresh-btn" onClick={fetchStats}>
+            🔄 Refresh
+          </button>
+        </div>
+      </div>
+
+      <div className="stats-grid">
+        <div className="stat-card primary">
+          <div className="stat-icon">👥</div>
+          <div className="stat-content">
+            <span className="stat-label">Public Sessions</span>
+            <span className="stat-value">{stats?.publicSessions?.toLocaleString() || 0}</span>
+            <span className="stat-sublabel">Active user sessions</span>
+          </div>
+        </div>
+
+        <div className="stat-card success">
+          <div className="stat-icon">🔐</div>
+          <div className="stat-content">
+            <span className="stat-label">Admin Sessions</span>
+            <span className="stat-value">{stats?.adminSessions?.toLocaleString() || 0}</span>
+            <span className="stat-sublabel">Authenticated admins</span>
+          </div>
+        </div>
+
+        <div className="stat-card info">
+          <div className="stat-icon">🆔</div>
+          <div className="stat-content">
+            <span className="stat-label">Device Fingerprints</span>
+            <span className="stat-value">{stats?.deviceFingerprints?.toLocaleString() || 0}</span>
+            <span className="stat-sublabel">Tracked devices</span>
+          </div>
+        </div>
+
+        <div className="stat-card warning">
+          <div className="stat-icon">🟢</div>
+          <div className="stat-content">
+            <span className="stat-label">Online Now</span>
+            <span className="stat-value">{stats?.onlineVisitors?.toLocaleString() || 0}</span>
+            <span className="stat-sublabel">Active in 15 min</span>
+          </div>
+        </div>
+
+        <div className="stat-card accent">
+          <div className="stat-icon">🌍</div>
+          <div className="stat-content">
+            <span className="stat-label">Active Devices</span>
+            <span className="stat-value">{stats?.activeDevices?.toLocaleString() || 0}</span>
+            <span className="stat-sublabel">Recent activity</span>
+          </div>
+        </div>
+
+        <div className="stat-card neutral">
+          <div className="stat-icon">📰</div>
+          <div className="stat-content">
+            <span className="stat-label">Total Articles</span>
+            <span className="stat-value">{stats?.totalArticles?.toLocaleString() || 0}</span>
+            <span className="stat-sublabel">Published content</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="quick-cleanup-section">
+        <div className="section-header">
+          <h3>🧹 Quick Cleanup</h3>
+          <p>Remove expired sessions and inactive data</p>
+        </div>
+
+        <button
+          className="cleanup-btn"
+          onClick={cleanupDeadSessions}
+          disabled={cleanupLoading}
+        >
+          {cleanupLoading ? (
+            <>
+              <span className="btn-spinner">🔄</span>
+              <span>Cleaning...</span>
+            </>
+          ) : (
+            <>
+              <span>🧹</span>
+              <span>Clean Dead Sessions</span>
+            </>
+          )}
+        </button>
+      </div>
+
+      <div className="overview-notice">
+        <div className="notice-icon">ℹ️</div>
+        <div className="notice-content">
+          <strong>Session Management:</strong> Active sessions are automatically maintained. 
+          The cleanup process only removes expired and inactive data while preserving 
+          geographic tracking information and device fingerprints.
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SessionOverview;

@@ -1,0 +1,286 @@
+/* ============================================
+   HERO SECTION (Optimized)
+   ============================================ */
+
+.hero-section {
+  /* Set primary height */
+  height: 330px; 
+  display: grid;
+  /* 2/3 for slider, 1/3 for the side column */
+  grid-template-columns: 2fr 1fr;
+  gap: 0;
+  margin: 0 0 24px 0;
+  border-bottom: 2px solid var(--divider-color);
+  /* Use 'position: relative' and 'isolation: isolate' to establish a clean stacking context */
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-slider-col {
+  position: relative;
+  border-right: 1px solid var(--divider-color);
+  isolation: isolate;
+  /* Make sure the slider is above its content */
+  z-index: 10;
+}
+
+.hero-slider-col * {
+  box-sizing: border-box;
+}
+
+/* --- SLIDER CORE --- */
+
+.slider-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.slider-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slider-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Controls visibility for slide transition */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
+}
+
+.slider-slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* --- SLIDE CONTENT & IMAGE --- */
+
+.slide-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Background Blur Effect */
+.slide-bg-blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px);
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 2;
+}
+
+/* Gradient Overlay for Text Readability */
+.slide-gradient {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  /* Darker gradient at the bottom */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+  z-index: 3;
+}
+
+.slide-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 4;
+  color: white;
+  /* Added text shadow for extra punch on images */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.slide-category-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px; /* Slightly reduced margin */
+}
+
+/* Primary focus: Big Title */
+.slide-title {
+  font-size: 1.8rem; /* Increased size for emphasis */
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 8px 0;
+  color: white;
+}
+
+/* Secondary focus: Smaller Excerpt/Meta */
+.slide-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem; /* Smaller than title */
+  opacity: 0.8;
+}
+
+.meta-separator {
+  opacity: 0.6;
+}
+
+/* --- NAVIGATION BUTTONS --- */
+
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.slider-btn:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.slider-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.slider-prev {
+  left: 16px;
+}
+
+.slider-next {
+  right: 16px;
+}
+
+/* --- PROGRESS DOTS --- */
+
+.slider-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.slider-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.slider-dot.active {
+  border-color: var(--primary-color);
+}
+
+.slider-dot:hover {
+  transform: scale(1.2);
+}
+
+.dot-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--primary-color);
+  transition: width 0.1s linear;
+}
+
+/* --- PLACEHOLDERS (Kept for completeness) --- */
+
+.slide-placeholder {
+  width: 100%;
+  height: 100%;
+  background: var(--background-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--text-muted);
+}
+
+.hero-slider-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-secondary);
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+
+@media (max-width: 768px) {
+  .slide-content {
+    padding: 16px;
+  }
+  
+  .slide-title {
+    font-size: 1.4rem; /* Adjusted for smaller screens */
+  }
+  
+  .slider-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .slider-dots {
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slide-title {
+    font-size: 1.1rem; /* Adjusted for smallest screens */
+  }
+  
+  .slide-meta {
+    font-size: 0.8rem;
+  }
+  
+  .slider-btn {
+    width: 36px;
+    height: 36px;
+  }
+}

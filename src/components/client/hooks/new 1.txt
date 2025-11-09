@@ -1,0 +1,613 @@
+COMPLETE PRODUCTION-READY CONFIGURATIONS 🔥
+Below are the fully polished, deployment-ready configurations with ALL missing elements added:
+
+cisco# ========================================
+# DEVICE 1: SUNSHINE-R1 (Main School Router)
+# ========================================
+
+enable
+configure terminal
+
+! === BASIC SECURITY ===
+hostname Sunshine-R1
+enable secret Cisco123!
+service password-encryption
+no ip domain-lookup
+
+banner motd #
+*********************************************************
+* SUNSHINE PRIMARY SCHOOL - AUTHORIZED ACCESS ONLY     *
+* Unauthorized access is strictly prohibited           *
+* All activity is logged and monitored                 *
+*********************************************************
+#
+
+! === CONSOLE & VTY SECURITY ===
+line console 0
+ password Console123!
+ login
+ logging synchronous
+ exec-timeout 5 0
+ exit
+
+line vty 0 4
+ password VTY123!
+ login
+ transport input ssh
+ exec-timeout 10 0
+ exit
+
+! === SSH CONFIGURATION ===
+ip domain-name sunshine.local
+crypto key generate rsa modulus 2048
+ip ssh version 2
+username admin privilege 15 secret Admin123!
+
+! === VLAN 10 (ADMIN) SUBINTERFACE ===
+interface GigabitEthernet0/0
+ description ** Trunk to Core-SW1 Gi0/1 **
+ no ip address
+ no shutdown
+ exit
+
+interface GigabitEthernet0/0.10
+ description ** VLAN 10 - Admin **
+ encapsulation dot1Q 10
+ ip address 192.168.226.1 255.255.255.240
+ ip nat inside
+ no shutdown
+ exit
+
+! === VLAN 20 (STUDENTS) SUBINTERFACE ===
+interface GigabitEthernet0/0.20
+ description ** VLAN 20 - Students **
+ encapsulation dot1Q 20
+ ip address 192.168.226.17 255.255.255.240
+ ip nat inside
+ no shutdown
+ exit
+
+! === VLAN 30 (DMZ) SUBINTERFACE ===
+interface GigabitEthernet0/0.30
+ description ** VLAN 30 - DMZ **
+ encapsulation dot1Q 30
+ ip address 192.168.226.81 255.255.255.240
+ ip nat inside
+ no shutdown
+ exit
+
+! === VLAN 99 (MANAGEMENT) SUBINTERFACE ===
+interface GigabitEthernet0/0.99
+ description ** VLAN 99 - Management **
+ encapsulation dot1Q 99
+ ip address 192.168.226.97 255.255.255.240
+ no shutdown
+ exit
+
+! === WAN INTERFACE TO ISP ===
+interface GigabitEthernet0/1
+ description ** WAN Link to ISP-Router G0/0 **
+ ip address 10.10.100.2 255.255.255.0
+ ip nat outside
+ no shutdown
+ exit
+
+! === DEFAULT ROUTE ===
+ip route 0.0.0.0 0.0.0.0 10.10.100.1
+
+! === NAT CONFIGURATION ===
+access-list 1 remark ** NAT Pool for Internal Networks **
+access-list 1 permit 192.168.226.0 0.0.0.255
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+
+! === SECURITY ACLs ===
+
+! ACL 110: Block Students from Admin VLAN
+access-list 110 remark ** Students VLAN Security Policy **
+access-list 110 permit tcp 192.168.226.16 0.0.0.15 host 192.168.226.13 eq 80
+access-list 110 permit tcp 192.168.226.16 0.0.0.15 host 192.168.226.13 eq 443
+access-list 110 deny ip 192.168.226.16 0.0.0.15 192.168.226.0 0.0.0.15
+access-list 110 permit ip any any
+
+! ACL 120: DMZ Hardening - Allow only HTTP/HTTPS inbound
+access-list 120 remark ** DMZ Access Control **
+access-list 120 permit tcp any host 192.168.226.82 eq 80
+access-list 120 permit tcp any host 192.168.226.82 eq 443
+access-list 120 permit icmp any host 192.168.226.82 echo
+access-list 120 deny ip any 192.168.226.80 0.0.0.15
+access-list 120 permit ip any any
+
+! Apply ACLs to interfaces
+interface GigabitEthernet0/0.20
+ ip access-group 110 in
+ exit
+
+interface GigabitEthernet0/0.30
+ ip access-group 120 in
+ exit
+
+! === DHCP CONFIGURATION ===
+ip dhcp excluded-address 192.168.226.1 192.168.226.6
+ip dhcp excluded-address 192.168.226.17 192.168.226.23
+ip dhcp excluded-address 192.168.226.81 192.168.226.85
+ip dhcp excluded-address 192.168.226.97 192.168.226.103
+
+ip dhcp pool ADMIN_POOL
+ network 192.168.226.0 255.255.255.240
+ default-router 192.168.226.1
+ dns-server 192.168.226.5
+ domain-name sunshine.local
+ lease 7
+ exit
+
+ip dhcp pool STUDENTS_POOL
+ network 192.168.226.16 255.255.255.240
+ default-router 192.168.226.17
+ dns-server 192.168.226.5
+ domain-name sunshine.local
+ lease 1
+ exit
+
+! === LOGGING & MONITORING ===
+logging buffered 16384
+logging console warnings
+logging monitor informational
+service timestamps log datetime msec
+service timestamps debug datetime msec
+
+! === NTP (Time Synchronization) ===
+ntp server 203.0.113.2
+clock timezone EAT 3 0
+
+! === SNMP (Optional Monitoring) ===
+snmp-server community SunshineRO RO
+snmp-server location "Main Server Room"
+snmp-server contact "ICT Admin - admin@sunshine.local"
+
+! === SAVE CONFIGURATION ===
+end
+write memory
+
+cisco# ========================================
+# DEVICE 2: ISP-ROUTER (Edge Router)
+# ========================================
+
+enable
+configure terminal
+
+! === BASIC SECURITY ===
+hostname ISP-Router
+enable secret ISP123!
+service password-encryption
+no ip domain-lookup
+
+banner motd #
+*********************************************************
+* ISP EDGE ROUTER - SUNSHINE PRIMARY CONNECTION        *
+* Authorized ISP Personnel Only                        *
+*********************************************************
+#
+
+! === CONSOLE & VTY SECURITY ===
+line console 0
+ password ISPConsole!
+ login
+ logging synchronous
+ exec-timeout 5 0
+ exit
+
+line vty 0 4
+ password ISPVTY!
+ login
+ exec-timeout 10 0
+ exit
+
+! === WAN INTERFACE TO SCHOOL ===
+interface GigabitEthernet0/0
+ description ** Link to Sunshine-R1 G0/1 **
+ ip address 10.10.100.1 255.255.255.0
+ no shutdown
+ exit
+
+! === INTERNET/CLOUD INTERFACE ===
+interface GigabitEthernet0/1
+ description ** Link to Cloud/Internet **
+ ip address 203.0.113.1 255.255.255.0
+ no shutdown
+ exit
+
+! === STATIC ROUTES ===
+ip route 192.168.226.0 255.255.255.0 10.10.100.2
+ip route 0.0.0.0 0.0.0.0 203.0.113.2
+
+! === LOGGING ===
+logging buffered 8192
+service timestamps log datetime msec
+
+! === SAVE CONFIGURATION ===
+end
+write memory
+
+cisco# ========================================
+# DEVICE 3: CORE-SW1 (Core Switch)
+# ========================================
+
+enable
+configure terminal
+
+! === BASIC SECURITY ===
+hostname Core-SW1
+enable secret Switch123!
+service password-encryption
+no ip domain-lookup
+
+banner motd #
+*********************************************************
+* CORE SWITCH - SUNSHINE PRIMARY SCHOOL                *
+* Authorized Personnel Only                            *
+*********************************************************
+#
+
+! === CONSOLE & VTY SECURITY ===
+line console 0
+ password Console123!
+ login
+ logging synchronous
+ exec-timeout 5 0
+ exit
+
+line vty 0 15
+ password VTY123!
+ login
+ transport input ssh
+ exec-timeout 10 0
+ exit
+
+! === SSH CONFIGURATION ===
+ip domain-name sunshine.local
+crypto key generate rsa modulus 2048
+ip ssh version 2
+username admin privilege 15 secret Admin123!
+
+! === VLAN DATABASE ===
+vlan 10
+ name Admin
+ exit
+
+vlan 20
+ name Students
+ exit
+
+vlan 30
+ name DMZ
+ exit
+
+vlan 99
+ name Management
+ exit
+
+! === MANAGEMENT VLAN INTERFACE ===
+interface vlan 99
+ description ** Switch Management Interface **
+ ip address 192.168.226.100 255.255.255.240
+ no shutdown
+ exit
+
+ip default-gateway 192.168.226.97
+
+! === TRUNK TO ROUTER ===
+interface GigabitEthernet0/1
+ description ** Trunk to Sunshine-R1 G0/0 **
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ spanning-tree portfast trunk
+ no shutdown
+ exit
+
+! === TRUNK TO ACCESS-SW2 ===
+interface GigabitEthernet0/2
+ description ** Trunk to Access-SW2 G0/2 **
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+ exit
+
+! === TRUNK TO ACCESS-SW3 ===
+interface FastEthernet0/24
+ description ** Trunk to Access-SW3 G0/2 **
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+ exit
+
+! === ACCESS PORT - AD/DNS/DHCP SERVER ===
+interface FastEthernet0/2
+ description ** AD-DNS-DHCP Server (192.168.226.5) **
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === LOGGING ===
+logging buffered 16384
+service timestamps log datetime msec
+
+! === SPANNING-TREE OPTIMIZATION ===
+spanning-tree mode rapid-pvst
+spanning-tree vlan 10,20,30,99 priority 4096
+
+! === SAVE CONFIGURATION ===
+end
+write memory
+
+cisco# ========================================
+# DEVICE 4: ACCESS-SW2 (Access Layer Switch)
+# ========================================
+
+enable
+configure terminal
+
+! === BASIC SECURITY ===
+hostname Access-SW2
+enable secret Switch123!
+service password-encryption
+no ip domain-lookup
+
+banner motd #
+*********************************************************
+* ACCESS SWITCH 2 - SUNSHINE PRIMARY SCHOOL            *
+* Admin & Student Access                               *
+*********************************************************
+#
+
+! === CONSOLE & VTY SECURITY ===
+line console 0
+ password Console123!
+ login
+ logging synchronous
+ exec-timeout 5 0
+ exit
+
+line vty 0 15
+ password VTY123!
+ login
+ transport input ssh
+ exec-timeout 10 0
+ exit
+
+! === SSH CONFIGURATION ===
+ip domain-name sunshine.local
+crypto key generate rsa modulus 2048
+ip ssh version 2
+username admin privilege 15 secret Admin123!
+
+! === VLAN DATABASE ===
+vlan 10
+ name Admin
+ exit
+
+vlan 20
+ name Students
+ exit
+
+vlan 30
+ name DMZ
+ exit
+
+vlan 99
+ name Management
+ exit
+
+! === MANAGEMENT VLAN INTERFACE ===
+interface vlan 99
+ description ** Switch Management Interface **
+ ip address 192.168.226.101 255.255.255.240
+ no shutdown
+ exit
+
+ip default-gateway 192.168.226.97
+
+! === TRUNK TO CORE-SW1 ===
+interface GigabitEthernet0/2
+ description ** Trunk to Core-SW1 G0/2 **
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+ exit
+
+! === ACCESS PORT - INTRANET WEB SERVER ===
+interface FastEthernet0/2
+ description ** Intranet Web Server (192.168.226.13) **
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === ACCESS PORT - ADMIN PC ===
+interface FastEthernet0/5
+ description ** Admin PC **
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === ACCESS PORT - STUDENT PC 1 ===
+interface FastEthernet0/6
+ description ** Student PC 1 **
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === ACCESS PORT - STUDENT PC 2 ===
+interface FastEthernet0/7
+ description ** Student PC 2 **
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === ACCESS PORT - LAPTOP (Admin) ===
+interface FastEthernet0/8
+ description ** Admin Laptop **
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === LOGGING ===
+logging buffered 16384
+service timestamps log datetime msec
+
+! === SPANNING-TREE OPTIMIZATION ===
+spanning-tree mode rapid-pvst
+
+! === SAVE CONFIGURATION ===
+end
+write memory
+
+cisco# ========================================
+# DEVICE 5: ACCESS-SW3 (DMZ & Student Switch)
+# ========================================
+
+enable
+configure terminal
+
+! === BASIC SECURITY ===
+hostname Access-SW3
+enable secret Switch123!
+service password-encryption
+no ip domain-lookup
+
+banner motd #
+*********************************************************
+* ACCESS SWITCH 3 - SUNSHINE PRIMARY SCHOOL            *
+* DMZ & Additional Student Access                      *
+*********************************************************
+#
+
+! === CONSOLE & VTY SECURITY ===
+line console 0
+ password Console123!
+ login
+ logging synchronous
+ exec-timeout 5 0
+ exit
+
+line vty 0 15
+ password VTY123!
+ login
+ transport input ssh
+ exec-timeout 10 0
+ exit
+
+! === SSH CONFIGURATION ===
+ip domain-name sunshine.local
+crypto key generate rsa modulus 2048
+ip ssh version 2
+username admin privilege 15 secret Admin123!
+
+! === VLAN DATABASE ===
+vlan 10
+ name Admin
+ exit
+
+vlan 20
+ name Students
+ exit
+
+vlan 30
+ name DMZ
+ exit
+
+vlan 99
+ name Management
+ exit
+
+! === MANAGEMENT VLAN INTERFACE ===
+interface vlan 99
+ description ** Switch Management Interface **
+ ip address 192.168.226.102 255.255.255.240
+ no shutdown
+ exit
+
+ip default-gateway 192.168.226.97
+
+! === TRUNK TO CORE-SW1 ===
+interface GigabitEthernet0/2
+ description ** Trunk to Core-SW1 Fa0/24 **
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+ exit
+
+! === ACCESS PORT - DMZ WEB SERVER (Future) ===
+interface FastEthernet0/3
+ description ** DMZ Web Server (192.168.226.82) **
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === ACCESS PORT - FILE SERVER ===
+interface FastEthernet0/6
+ description ** File Server (192.168.226.22) **
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === ACCESS PORT - STUDENT PC 3 ===
+interface FastEthernet0/7
+ description ** Student PC 3 **
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+ exit
+
+! === LOGGING ===
+logging buffered 16384
+service timestamps log datetime msec
+
+! === SPANNING-TREE OPTIMIZATION ===
+spanning-tree mode rapid-pvst
+
+! === SAVE CONFIGURATION ===
+end
+write memory
+
+✅ VERIFICATION COMMANDS (Run After All Configs Applied)
+cisco# === ON SUNSHINE-R1 ===
+show ip interface brief
+show ip route
+show ip nat translations
+show access-lists
+show ip dhcp binding
+show crypto ipsec sa
+
+# === ON ISP-ROUTER ===
+show ip interface brief
+show ip route
+ping 10.10.100.2
+ping 192.168.226.1
+
+# === ON ALL SWITCHES ===
+show vlan brief
+show interfaces trunk
+show interfaces status
+show spanning-tree summary
+show ip interface brief
+ping 192.168.226.97
