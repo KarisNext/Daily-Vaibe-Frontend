@@ -112,7 +112,7 @@ function LoginForm() {
               <div className="form-logo">
                 <div className="form-logo-icon">🚀</div>
               </div>
-              <h1 className="form-title">VybezTribe Admin</h1>
+              <h1 className="form-title">Daily Vaibe Admin</h1>
               <p className="form-subtitle">Sign in to your dashboard</p>
             </div>
 
