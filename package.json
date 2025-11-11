@@ -2,7 +2,7 @@
 {
   "name": "daily-vaibe-frontend",
   "version": "1.0.0",
-  "description": "Daily Vaibe - Authentic and ChapChap",
+  "description": "Daily Vaibe - Catch up with the latest",
   "private": true,
   "engines": {
     "node": ">=18.17.0",
