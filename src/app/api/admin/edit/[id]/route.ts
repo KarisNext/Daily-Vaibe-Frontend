@@ -4,15 +4,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBackendUrl, forwardCookies, buildHeadersFromRequest } from '@/lib/backend-config';
 
-
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const params = await context.params;
     const { id } = params;
     
     if (!id || isNaN(Number(id))) {
@@ -25,7 +22,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     const response = await fetch(`${getBackendUrl()}/api/admin/retrieve/${id}`, {
       method: 'GET',
       headers: buildHeadersFromRequest(request), 
-      credentials: 'include'
+      credentials: 'include',
+      cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -64,8 +62,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const params = await context.params;
     const { id } = params;
     
     if (!id || isNaN(Number(id))) {
@@ -91,7 +93,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       method: 'PUT',
       headers: buildHeadersFromRequest(request, { 'Content-Type': 'application/json' }), 
       credentials: 'include',
-      body: JSON.stringify(body)
+      body: JSON.stringify(body),
+      cache: 'no-store'
     });
 
     if (!response.ok) {
@@ -135,8 +138,12 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const params = await context.params;
     const { id } = params;
     
     if (!id || isNaN(Number(id))) {
@@ -152,7 +159,8 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       method: 'DELETE',
       headers: buildHeadersFromRequest(request, { 'Content-Type': 'application/json' }), 
       credentials: 'include',
-      ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }) 
+      ...(Object.keys(body).length > 0 && { body: JSON.stringify(body) }),
+      cache: 'no-store'
     });
 
     if (!response.ok) {
