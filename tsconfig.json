@@ -5,7 +5,6 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -14,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
@@ -34,15 +34,18 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next-vybeztribe/types/**/*.ts",
+    ".next/types/**/*.ts",
     "src/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
     ".next",
-    ".next-vybeztribe",
     "out",
-    "build"
+    "build",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.spec.tsx",
+    "**/*.test.tsx"
   ]
 }
