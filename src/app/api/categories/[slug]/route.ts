@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBackendUrl, forwardCookies, buildHeadersFromRequest } from '@/lib/backend-config';
 
-interface RouteParams {
-  params: {
-    slug: string;
-  };
-}
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ slug: string }> }
+) {
   try {
+    const params = await context.params;
     const backendUrl = getBackendUrl();
     const { slug } = params;
     const { searchParams } = new URL(request.url);
