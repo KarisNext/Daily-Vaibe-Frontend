@@ -1,13 +1,19 @@
 {
-  "name": "Daily Vaibe-frontend",
+  "name": "daily-vaibe-frontend",
   "version": "1.0.0",
   "description": "Daily Vaibe - Authentic and ChapChap",
   "private": true,
+  "engines": {
+    "node": ">=18.17.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0 --port 3000",
     "build": "next build",
-    "start": "next start --hostname 0.0.0.0 --port 3000",
-    "lint": "next lint"
+    "start": "next start --hostname 0.0.0.0",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "postinstall": "npm run type-check || true"
   },
   "dependencies": {
     "lucide-react": "^0.548.0",
